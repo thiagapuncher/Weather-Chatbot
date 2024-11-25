@@ -123,6 +123,8 @@ def get_activities_suggestions(city, activity_type):
     for place in places_response.get("results", []):
         activities.append(place["name"])
     
+    activities = list(set(activities))
+    
     if not activities:
         return ["No activities found"]
     return activities
