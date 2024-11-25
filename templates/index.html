@@ -3,6 +3,7 @@
 
 <head>
     <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
     <title> Weather Chatbot </title>
 </head>
 <body>
@@ -11,12 +12,26 @@
         <input type = "text" name = "city" placeholder = "Ask me about the weather" required>
         <button type = "submit"> Send </button>
     </form>
-    {% if response %}
-        <div>
-            <h2>Response:</h2>
-            <p>{{ response }}</p>
-        </div>
+
+
+
+
+{% if city %}
+    <h2>Weather in {{ city }}</h2>
+    <div>Temperature: {{ temp_celsius }}°C / {{ temp_fahrenheit }}°F</div>
+    <div>Feels Like: {{ feels_like_celsius }}°C / {{ feels_like_fahrenheit }}°F</div>
+    <div>Min Temperature: {{ temp_min_celsius }}°C / {{ temp_min_fahrenheit }}°F</div>
+    <div>Max Temperature: {{ temp_max_celsius }}°C / {{ temp_max_fahrenheit }}°F</div>
+    <div>Description: {{ description }}</div>
+    <div>Humidity: {{ humidity }}%</div>
+    <div>Pressure: {{ pressure }} hPa</div>
+    <div>Wind Speed: {{ wind_speed }} km/h</div>
+    <div>Wind Direction: {{ wind_direction }}°</div>
+    <div>Visibility: {{ visibility }} m</div>
+
     {% endif %}
+
+
 </body>
 </html>
 

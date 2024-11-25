@@ -6,27 +6,70 @@ from configuration import OPENWEATHER_API_KEY, GOOGLEPLACES_API_KEY
 
 app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
+
+
 def index():
-    if request.method == 'POST':
-        city = request.form.get('city')
+    if request.method == "POST":
+        city = request.form.get("city")
         if not city:
-            return render_template('index.html', error = 'Please enter a city name')
+            return render_template("index.html", error="Please enter a city name.")
         
-        # api request url
-        url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPENWEATHER_API_KEY}'
+        # api request 
+        url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPENWEATHER_API_KEY}&units=metric"
         response = requests.get(url)
         data = response.json()
 
+    
+        # debugging
+        print(data)
+        if response.status_code != 200 or "main" not in data:
+            error_message = data.get("message", "Unable to fetch weather data.")
+            return render_template("index.html", error=f"Error: {error_message}")
 
         # getting weather data
-        temp = data['main']['temp']
-        description = data['weather'][0]['description']
-        humidity = data['main']['humidity']
 
-        # return a response with weather data
-        return render_template('index.html', temp=temp, city=city,  description=description, humidity=humidity)
-   
-    return render_template('index.html')
+        # degrees in C
+        temp_celsius = data["main"]["temp"]
+        feels_like_celsius = data["main"]["feels_like"]
+        temp_min_celsius = data["main"]["temp_min"]
+        temp_max_celsius = data["main"]["temp_max"]
+
+
+        # degrees in F
+        temp_fahrenheit = temp_celsius * 9 / 5 + 32
+        feels_like_fahrenheit = feels_like_celsius * 9 / 5 + 32
+        temp_min_fahrenheit = temp_min_celsius * 9 / 5 + 32
+        temp_max_fahrenheit = temp_max_celsius * 9 / 5 + 32
+
+        # other weather data
+        humidity = data["main"]["humidity"]
+        pressure = data["main"]["pressure"]
+        description = data["weather"][0]["description"]
+        wind_speed = data["wind"]["speed"]
+        wind_direction = data["wind"]["deg"]
+        visibility = data["visibility"]
+        city_name = data["name"]
+
+        # rendering the weather data
+        return render_template(
+            "index.html",
+            city=city_name,
+            temp_celsius=temp_celsius,
+            temp_fahrenheit=temp_fahrenheit,
+            feels_like_celsius=feels_like_celsius,
+            feels_like_fahrenheit=feels_like_fahrenheit,
+            temp_min_celsius=temp_min_celsius,
+            temp_max_celsius=temp_max_celsius,
+            temp_min_fahrenheit=temp_min_fahrenheit,
+            temp_max_fahrenheit=temp_max_fahrenheit,
+            humidity=humidity,
+            pressure=pressure,
+            description=description,
+            wind_speed=wind_speed,
+            wind_direction=wind_direction,
+            visibility=visibility,
+        )
+    return render_template("index.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -113,7 +156,7 @@ def get_activities_suggestions(location, weather_data):
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         f'?location={lat},{lon}'
         f'&radius=5000'
-        f'&type={activity_type}'
+        f'&type={activities_type}'
         f'&key={GOOGLEPLACES_API_KEY}'
 
     )
