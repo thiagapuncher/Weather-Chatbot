@@ -1,2 +1,2 @@
-OPENWEATHER_API_KEY = 'enter  your own api key here'
-GOOGLEPLACES_API_KEY = 'enter your own api key here'
+OPENWEATHER_API_KEY = 'cd861acbc11e155deeda8fe2866e6f33'
+GOOGLEPLACES_API_KEY = 'AIzaSyDV8W2X1UukL_G2mXJIgyUnQb58wofth08'

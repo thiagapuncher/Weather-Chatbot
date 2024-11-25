@@ -41,6 +41,7 @@ def index():
         temp_min_fahrenheit = temp_min_celsius * 9 / 5 + 32
         temp_max_fahrenheit = temp_max_celsius * 9 / 5 + 32
 
+       
         # other weather data
         humidity = data["main"]["humidity"]
         pressure = data["main"]["pressure"]
@@ -49,6 +50,23 @@ def index():
         wind_direction = data["wind"]["deg"]
         visibility = data["visibility"]
         city_name = data["name"]
+
+
+        # determine activity type based on weather conditions
+        if "rain" in description or "storm" in description:
+            activity_type = "museum"
+        elif "snow" in description:
+            activity_type = "ski_resort"
+        elif "clear" in description or "sunny" in description:
+            activity_type = "park"
+        else:
+            activity_type = "cafe" 
+
+        # get activities suggestions
+        activities = get_activities_suggestions(city, activity_type)
+
+
+
 
         # rendering the weather data
         return render_template(
@@ -68,8 +86,49 @@ def index():
             wind_speed=wind_speed,
             wind_direction=wind_direction,
             visibility=visibility,
+             activities=activities,
         )
     return render_template("index.html")
+
+
+def get_activities_suggestions(city, activity_type):
+    # get coords needed
+    geocoding_url = f"https://maps.googleapis.com/maps/api/geocode/json?address={city}&key={GOOGLEPLACES_API_KEY}"
+    geo_response = requests.get(geocoding_url).json()
+
+    # see if api request was successful
+    if not geo_response['results']:
+        return ["No activities found"]
+
+    # get the coords
+    lat = geo_response['results'][0]['geometry']['location']['lat']
+    lon = geo_response['results'][0]['geometry']['location']['lng']
+
+# debugging
+    print(f"Coordinates for {city}: Latitude: {lat}, Longitude: {lon}")
+
+
+    places_url = (
+        f"https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+        f"?location={lat},{lon}"
+        f"&radius=5000"
+        f"&type={activity_type}"
+        f"&key={GOOGLEPLACES_API_KEY}"
+    )
+
+    places_response = requests.get(places_url).json()
+    print(f"Google Places API Response: {places_response}")
+
+    activities = []
+    for place in places_response.get("results", []):
+        activities.append(place["name"])
+    
+    if not activities:
+        return ["No activities found"]
+    return activities
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -133,39 +192,6 @@ def get_weather_data(location, time_period):
   return weather_response
 
 
-def get_activities_suggestions(location, weather_data):
-   # first determine the weather condition  
-    weather_condition = weather_data['current']['weather'][0]['main'].lower()
-
-    # set activities based on the weather conditions
-    if 'rain' in weather_condition:
-        activities_type = 'museum'
-    else:
-        activities_type = 'park'
-
-    # using google places API to get the activities suggestions
-    geolocation_url = f'https://maps.googleapis.com/maps/api/geocode/json?address={location}&key={GOOGLEPLACES_API_KEY}'
-    geolocation_response = requests.get(geolocation_url).json()
-    if not geolocation_response['results']:
-        return []
-    
-    lat = geolocation_response['results'][0]['geometry']['location']['lat']
-    lon = geolocation_response['results'][0]['geometry']['location']['lng']
-
-    places_url = (
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
-        f'?location={lat},{lon}'
-        f'&radius=5000'
-        f'&type={activities_type}'
-        f'&key={GOOGLEPLACES_API_KEY}'
-
-    )
-
-    places_response = requests.get(places_url).json()
-    activities = []
-    for place in places_response['results']:
-        activities.append(place['name'])
-    return activities
 
 
 
