@@ -1,0 +1,113 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0%;
+    background-color: FBFBFB;
+    color: #0d1b2a;
+    font-family: 'Georgia', serif; 
+  }
+
+header {
+    font-size: 20px;
+    background-color: #C6E7FF;
+    text-align: center;
+    padding: 1em;
+}
+
+.navbar {
+    list-style-type: none;
+    background-color: #7EB2DD;
+    overflow: hidden;
+    text-align: center;
+
+    li { 
+        display: inline;
+        padding: 1em;
+    }
+    
+    li a:hover{ 
+        background-color:#c5d5ea;
+    }
+    
+    li a{ 
+        padding: 1em;
+        color: #0d1b2a;
+    }
+}
+
+h2 { 
+    font-size: x-large;
+}
+
+form {
+    text-align: center;
+}
+
+p { 
+    text-align: center;
+    padding-top: 1em;
+    font-size: 20px;
+    
+}
+
+.aboutP {
+    p {
+        padding-left: 30%;
+        padding-right: 30%; 
+    }
+}
+
+.things {
+    p {
+        padding-top: 0;
+        margin: 0;
+    }
+}
+
+input {
+    padding: 12px;
+    width: 30%;
+    margin: 20px 0;
+}
+button {
+    background-color: #C6E7FF;
+    width: 50px;
+    padding: 5px;
+    border-color: #C6E7FF;
+
+}
+
+input:hover {
+     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0, 0.50) 
+}
+
+.main { 
+    padding: 20px;
+    text-align: center;
+    column-count: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#left, #right {
+    padding: 20px;
+    text-align: left;
+    display: inline-block;
+    vertical-align: top;
+    max-width: 350px;
+}
+
+footer {
+    background-color: #C6E7FF;
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+    margin-top: auto;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
