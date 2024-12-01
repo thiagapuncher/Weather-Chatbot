@@ -129,7 +129,10 @@ def get_activities_suggestions(city, activity_type):
         return ["No activities found"]
     return activities
 
-
+# for about page
+@app.route('/about/')
+def about():    
+    return render_template('about.html')
 
 
 if __name__ == '__main__':

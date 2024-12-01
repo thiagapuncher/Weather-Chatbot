@@ -5,45 +5,77 @@
     <meta charset = "UTF-8">
     <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
     <title> Weather Chatbot </title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styling.css') }}">
 </head>
+
 <body>
-    <h1> Weather Chatbot </h1>  
-    <form method="post">
-        <input type = "text" name = "city" placeholder = "Ask me about the weather" required>
-        <button type = "submit"> Send </button>
-    </form>
+    <div class="container">
+        <header> <h1>Weather Chatbot </h1></header>  
+
+        <nav>
+            <div class="navbar">
+            <ul>
+                <li>
+                  <a href="http://127.0.0.1:5000" style="text-decoration:none">Home</a>
+                </li>
+                <li>
+                  <a href="http://127.0.0.1:5000/about" style="text-decoration:none">About</a>
+                </li>
+            </ul>
+            </div>
+        </nav>
 
 
+        <p>Ask away!</p>
+        <form method="post">
+            <input type = "text" name = "city" placeholder = "Ask me about the weather" required>
+            <button type = "submit"> Send </button>
+        </form>
 
+        <div class="main">
+            <div class="things"> 
+                {% if city %}
+                <p>Here is the weather for {{ city }} and some activities you can do!</p>  
+                {% endif %}
+                
+                <div id="left">
+                {% if city %}
+                <h2>Weather in {{ city }}</h2>
+                <div>Temperature: {{ temp_celsius }}°C / {{ temp_fahrenheit }}°F</div>
+                <div>Feels Like: {{ feels_like_celsius }}°C / {{ feels_like_fahrenheit }}°F</div>
+                <div>Min Temperature: {{ temp_min_celsius }}°C / {{ temp_min_fahrenheit }}°F</div>
+                <div>Max Temperature: {{ temp_max_celsius }}°C / {{ temp_max_fahrenheit }}°F</div>
+                <div>Description: {{ description }}</div>
+                <div>Humidity: {{ humidity }}%</div>
+                <div>Pressure: {{ pressure }} hPa</div>
+                <div>Wind Speed: {{ wind_speed }} km/h</div>
+                <div>Wind Direction: {{ wind_direction }}°</div>
+                <div>Visibility: {{ visibility }} m</div>
+                {% endif %}
+                </div>
+            
+                <div id="right">
+                {% if activities %}
+                <h2>Activities</h2>
+                <ul>
+                    {% for activity in activities %}
+                    <li>{{ activity }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                </div>
+            </div>
+        </div>
 
-{% if city %}
-    <h2>Weather in {{ city }}</h2>
-    <div>Temperature: {{ temp_celsius }}°C / {{ temp_fahrenheit }}°F</div>
-    <div>Feels Like: {{ feels_like_celsius }}°C / {{ feels_like_fahrenheit }}°F</div>
-    <div>Min Temperature: {{ temp_min_celsius }}°C / {{ temp_min_fahrenheit }}°F</div>
-    <div>Max Temperature: {{ temp_max_celsius }}°C / {{ temp_max_fahrenheit }}°F</div>
-    <div>Description: {{ description }}</div>
-    <div>Humidity: {{ humidity }}%</div>
-    <div>Pressure: {{ pressure }} hPa</div>
-    <div>Wind Speed: {{ wind_speed }} km/h</div>
-    <div>Wind Direction: {{ wind_direction }}°</div>
-    <div>Visibility: {{ visibility }} m</div>
-
-    {% endif %}
-
-
-{% if activities %}
-    <h2>Activities</h2>
-    <ul>
-        {% for activity in activities %}
-            <li>{{ activity }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
-
-
-
+        <br>
+        <br>
+        <br>
+    
+        <footer>
+            <div>Thanks for stopping by!</div> <br>
+            <div>Created by: Gisselle Quiroz, Angel Melo, and Andrea Figueroa</div>
+        </footer>
+    </div>
 </body>
-</html>
 
+</html>
