@@ -115,6 +115,51 @@ def get_activities_suggestions(city, activity_type):
 
 
 
+def get_activities_suggestions(location, activity_type):
+    # get coords needed
+    geocoding_url = f"https://maps.googleapis.com/maps/api/geocode/json?address={location}&key={GOOGLEPLACES_API_KEY}"
+    geo_response = requests.get(geocoding_url).json()
+
+    logging.debug(f"Geocoding Response for {location}: {geo_response}")
+
+
+    # see if api request was successful
+    if not geo_response['results']:
+        return ["No activities found"]
+
+    # get the coords
+    lat = geo_response['results'][0]['geometry']['location']['lat']
+    lon = geo_response['results'][0]['geometry']['location']['lng']
+
+# debugging
+    print(f"Coordinates for {location}: Latitude: {lat}, Longitude: {lon}")
+
+
+    places_url = (
+        f"https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+        f"?location={lat},{lon}"
+        f"&radius=5000"
+        f"&type={activity_type}"
+        f"&key={GOOGLEPLACES_API_KEY}"
+    )
+
+    places_response = requests.get(places_url).json()
+    logging.debug(f"Google Places API Response: {places_response}")
+    print(f"Google Places API Response: {places_response}")
+
+    activities =[place['name'] for place in places_response['results']]
+    activities = list(set(activities))
+    
+    if not activities:
+        error_message = "No activities found \n\n(Note: Weather may not allow activities or enter more specific location)"
+        error_message = error_message.replace("\n", "<br>")
+        return [error_message]
+    return activities
+
+
+
+
+
 
 def generate_response(weather_data, activities):
     # get the current weather details
