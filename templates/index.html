@@ -10,7 +10,7 @@
 
 <body>
     <div class="container">
-        <header> <h1>Weather Chatbot </h1></header>  
+        <header> <h1>⛅ Weather Chatbot ⛅</h1></header>  
 
         <nav>
             <div class="navbar">
@@ -26,16 +26,21 @@
         </nav>
 
 
-        <p>Ask away!</p>
+        <p>Ask away! </p>
         <form method="post">
             <input type = "text" name = "city" placeholder = "Ask me about the weather" required>
             <button type = "submit"> Send </button>
         </form>
 
+        {% if error %}
+            <p style="color: red; text-align: center;">{{ error|safe }}</p>
+         {% endif %}
+
         <div class="main">
             <div class="things"> 
-                {% if city %}
-                <p>Here is the weather for {{ city }} and some activities you can do!</p>  
+
+                {% if location %}
+                <p>Here is the weather for {{ location }} and some activities you can do based on the current weather!</p>  
                 {% endif %}
                 
                 <div id="left">
@@ -59,7 +64,7 @@
                 <h2>Activities</h2>
                 <ul>
                     {% for activity in activities %}
-                    <li>{{ activity }}</li>
+                    <li>{{ activity|safe }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -79,3 +84,4 @@
 </body>
 
 </html>
+
